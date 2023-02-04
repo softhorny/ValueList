@@ -33,6 +33,11 @@ public struct ValueList<T> where T : struct
 
         Clear();
     }
+    
+    public void Clear()
+    {
+        Count = 0;
+    }
 
     public void Add( T newItem )
     {
@@ -56,10 +61,5 @@ public struct ValueList<T> where T : struct
     public void Remove( int key )
     {
         GetRef( key ) = _items[ --Count ];
-    }
-
-    public void Clear()
-    {
-        Count = 0;
     }
 }
