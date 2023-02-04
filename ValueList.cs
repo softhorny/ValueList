@@ -7,11 +7,13 @@ public struct ValueList<T> where T : struct
     private T[] _items;
 
     public int Count { get; private set; }
+    
     public int Capacity => _items.Length;
 
     public T this[ int key ]
     {
         get => _items[ key ];
+        
         set => _items[ key ] = value;
     }
 
@@ -19,7 +21,7 @@ public struct ValueList<T> where T : struct
     {
         _items = capacity > 0 ? new T[ capacity ] : Array.Empty<T>();
 
-        Count = 0;
+        Clear();
     }
 
     public void Add( T newItem )
@@ -44,5 +46,10 @@ public struct ValueList<T> where T : struct
     public void Remove( int index )
     {
         _items[ index ] = _items[ --Count ];
+    }
+
+    public void Clear()
+    {
+        Count = 0;
     }
 }
