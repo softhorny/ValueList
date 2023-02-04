@@ -7,14 +7,23 @@ public struct ValueList<T> where T : struct
     private T[] _items;
 
     public int Count { get; private set; }
-    
     public int Capacity => _items.Length;
 
     public T this[ int key ]
     {
-        get => _items[ key ];
+        get => GetRef( key );
+
+        set => GetRef( key ) = value;
+    }
+
+    public ref T GetRef( int key )
+    {
+        if ( key >= Count )
+        {
+            throw new IndexOutOfRangeException( nameof( key ) );
+        }
         
-        set => _items[ key ] = value;
+        return ref _items[ key ];
     }
 
     public void Allocate( int capacity = DefaultCapacity )
@@ -43,9 +52,9 @@ public struct ValueList<T> where T : struct
         _items = newArray;
     }
 
-    public void Remove( int index )
+    public void Remove( int key )
     {
-        _items[ index ] = _items[ --Count ];
+        GetRef( key ) = _items[ --Count ];
     }
 
     public void Clear()
