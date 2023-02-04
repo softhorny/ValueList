@@ -3,21 +3,23 @@ using System;
 public struct ValueList<T> where T : struct
 {
     private const int DefaultCapacity = 4;
-    
+
     private T[] _items;
 
     public int Count { get; private set; }
     public int Capacity => _items.Length;
 
+    public T this[ int key ]
+    {
+        get => _items[ key ];
+        set => _items[ key ] = value;
+    }
+
     public void Allocate( int capacity = DefaultCapacity )
     {
         _items = capacity > 0 ? new T[ capacity ] : Array.Empty<T>();
-    }
 
-    public T this[ int index ]
-    {
-        get => _items[ index ];
-        set => _items[ index ] = value;
+        Count = 0;
     }
 
     public void Add( T newItem )
