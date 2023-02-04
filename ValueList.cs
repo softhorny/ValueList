@@ -7,6 +7,7 @@ public struct ValueList<T> where T : struct
     private T[] _items;
 
     public int Count { get; private set; }
+    
     public int Capacity => _items.Length;
 
     public T this[ int key ]
