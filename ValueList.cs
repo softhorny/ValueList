@@ -20,7 +20,7 @@ public struct ValueList<T> where T : struct
     {
         if ( key >= Count )
         {
-            throw new IndexOutOfRangeException( nameof( key ) );
+            throw new IndexOutOfRangeException();
         }
         
         return ref _items[ key ];
