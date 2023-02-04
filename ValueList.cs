@@ -32,9 +32,7 @@ public struct ValueList<T> where T : struct
 
     public void Grow()
     {
-        int newLength = Capacity << 1;
-
-        T[] newArray = new T[ newLength ];
+        T[] newArray = new T[ Capacity << 1 ];
         
         Array.Copy( _items, 0, newArray, 0, Count );
 
