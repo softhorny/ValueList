@@ -1,65 +1,57 @@
 using System;
 
-public struct ValueList<T> where T : struct
+public struct ValueList<TItem> where TItem : struct
 {
     private const int DefaultCapacity = 4;
 
-    private T[] _items;
+    private TItem[] _items;
 
-    public int Count { get; private set; }
-    
+    private int _size;
+
+    public int Count => _size;
+
     public int Capacity => _items.Length;
 
-    public T this[ int key ]
+    public TItem this[ Index index ]
     {
-        get => GetRef( key );
+        get => _items[ index.GetOffset( _size ) ];
 
-        set => GetRef( key ) = value;
-    }
-
-    public ref T GetRef( int key )
-    {
-        if ( key >= Count )
-        {
-            throw new IndexOutOfRangeException();
-        }
-        
-        return ref _items[ key ];
+        set => _items[ index.GetOffset( _size ) ] = value;
     }
 
     public void Allocate( int capacity = DefaultCapacity )
     {
-        _items = capacity > 0 ? new T[ capacity ] : Array.Empty<T>();
+        _items = capacity > 0 ? new TItem[ capacity ] : Array.Empty<TItem>();
 
         Clear();
     }
-    
-    public void Clear()
-    {
-        Count = 0;
-    }
 
-    public void Add( T newItem )
+    public void Add( TItem newItem )
     {
         if ( Count == Capacity )
         {
             Grow();
         } 
 
-        _items[ Count++ ] = newItem;
+        _items[ _size++ ] = newItem;
     }
 
     public void Grow()
     {
-        T[] newArray = new T[ Capacity << 1 ];
+        TItem[] newArray = new TItem[ Capacity << 1 ];
         
         Array.Copy( _items, 0, newArray, 0, Count );
 
         _items = newArray;
     }
 
-    public void Remove( int key )
+    public void Remove( Index index )
     {
-        GetRef( key ) = _items[ --Count ];
+        _items[ index.GetOffset( _size ) ] = _items[ --_size ];
+    }
+
+    public void Clear()
+    {
+        _size = 0;
     }
 }
