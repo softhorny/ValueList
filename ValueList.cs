@@ -6,17 +6,15 @@ public struct ValueList<TItem> where TItem : struct
 
     private TItem[] _items;
 
-    private int _size;
-
-    public int Count => _size;
+    public int Count { get; private set; }
 
     public int Capacity => _items.Length;
 
     public TItem this[ Index index ]
     {
-        get => _items[ index.GetOffset( _size ) ];
+        get => _items[ index.GetOffset( Count ) ];
 
-        set => _items[ index.GetOffset( _size ) ] = value;
+        set => _items[ index.GetOffset( Count ) ] = value;
     }
 
     public void Allocate( int capacity = DefaultCapacity )
@@ -33,7 +31,7 @@ public struct ValueList<TItem> where TItem : struct
             Grow();
         } 
 
-        _items[ _size++ ] = newItem;
+        _items[ Count++ ] = newItem;
     }
 
     public void Grow()
@@ -47,11 +45,11 @@ public struct ValueList<TItem> where TItem : struct
 
     public void Remove( Index index )
     {
-        _items[ index.GetOffset( _size ) ] = _items[ --_size ];
+        _items[ index.GetOffset( Count ) ] = _items[ --Count ];
     }
 
     public void Clear()
     {
-        _size = 0;
+        Count = 0;
     }
 }
