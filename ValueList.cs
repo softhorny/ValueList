@@ -1,55 +1,58 @@
 using System;
 
-public struct ValueList<TItem> where TItem : struct
+namespace softh.Collections
 {
-    private const int DefaultCapacity = 4;
-
-    private TItem[] _items;
-
-    public int Count { get; private set; }
-
-    public int Capacity => _items.Length;
-
-    public TItem this[ Index index ]
+    public struct ValueList<TItem> where TItem : struct
     {
-        get => _items[ index.GetOffset( Count ) ];
+        private const int DefaultCapacity = 4;
 
-        set => _items[ index.GetOffset( Count ) ] = value;
-    }
+        private TItem[] _items;
 
-    public void Allocate( int capacity = DefaultCapacity )
-    {
-        _items = capacity > 0 ? new TItem[ capacity ] : Array.Empty<TItem>();
+        public int Count { get; private set; }
 
-        Clear();
-    }
+        public int Capacity => _items.Length;
 
-    public void Add( TItem newItem )
-    {
-        if ( Count == Capacity )
+        public TItem this[ Index index ]
         {
-            Grow();
-        } 
+            get => _items[ index.GetOffset( Count ) ];
 
-        _items[ Count++ ] = newItem;
-    }
+            set => _items[ index.GetOffset( Count ) ] = value;
+        }
 
-    public void Grow()
-    {
-        TItem[] newArray = new TItem[ Capacity << 1 ];
-        
-        Array.Copy( _items, 0, newArray, 0, Count );
+        public void Allocate( int capacity = DefaultCapacity )
+        {
+            _items = capacity > 0 ? new TItem[ capacity ] : Array.Empty<TItem>();
 
-        _items = newArray;
-    }
+            Clear();
+        }
 
-    public void Remove( Index index )
-    {
-        _items[ index.GetOffset( Count ) ] = _items[ --Count ];
-    }
+        public void Add( TItem newItem )
+        {
+            if ( Count == Capacity )
+            {
+                Grow();
+            } 
 
-    public void Clear()
-    {
-        Count = 0;
+            _items[ Count++ ] = newItem;
+        }
+
+        public void Grow()
+        {
+            TItem[] newArray = new TItem[ Capacity << 1 ];
+
+            Array.Copy( _items, 0, newArray, 0, Count );
+
+            _items = newArray;
+        }
+
+        public void Remove( Index index )
+        {
+            _items[ index.GetOffset( Count ) ] = _items[ --Count ];
+        }
+
+        public void Clear()
+        {
+            Count = 0;
+        }
     }
 }
